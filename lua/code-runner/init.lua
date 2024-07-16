@@ -23,7 +23,7 @@ M.runners = setmetatable({
   ["python"] = "python",
   ["haskell"] = "runhaskell",
   ["sh"] = "bash",
-}, { __index = nil })
+}, { __index = function() return "echo Unsupported Filetype: " end })
 
 function M.run()
   local dir = vim.fn.expand("%:h")
