@@ -45,6 +45,8 @@ function M.run()
   term.exec(command, nil, nil, dir, nil, "Code Runner")
 end
 
-vim.api.nvim_create_user_command("CodeRunnerRun", function() pcall(M.run) end, {})
+function M.setup()
+  vim.api.nvim_create_user_command("CodeRunnerRun", function() M.run() end, {})
+end
 
 return M
