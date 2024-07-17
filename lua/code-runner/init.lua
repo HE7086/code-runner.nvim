@@ -45,8 +45,14 @@ function M.run()
   term.exec(command, nil, nil, dir, nil, "Code Runner")
 end
 
-function M.setup()
+function M.setup(opts)
   vim.api.nvim_create_user_command("CodeRunnerRun", function() M.run() end, {})
+
+  if opts.runners then
+    for _, r in pairs(opts.runners) do
+      M.runners[r.ft] = r.runner
+    end
+  end
 end
 
 return M
