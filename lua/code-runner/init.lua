@@ -3,6 +3,10 @@ local term = require("toggleterm")
 local M = {}
 
 M.runners = setmetatable({
+  ["ahk"] = "autohotkey",
+  ["applescript"] = "osascript",
+  ["autoit"] = "autoit3",
+  ["bat"] = "cmd /c",
   ["c"] = function()
     local cc = os.getenv("CC") or "cc"
     local cflags = os.getenv("CFLAGS") or ""
@@ -15,6 +19,8 @@ M.runners = setmetatable({
       vim.fn.expand("%:r")
     )
   end,
+  ["closure"] = "lein exec",
+  ["coffeescript"] = "coffee",
   ["cpp"] = function()
     local cxx = os.getenv("CXX") or "c++"
     local cxxflags = os.getenv("CXXFLAGS") or ""
@@ -27,6 +33,38 @@ M.runners = setmetatable({
       vim.fn.expand("%:r")
     )
   end,
+  ["crystal"] = "crystal",
+  ["csharp"] = "scriptcs",
+  -- ["d"] = function() end,
+  ["dart"] = "dart",
+  ["erlang"] = "escript",
+  -- ["fortran"] = function() end,
+  ["fsharp"] = "fsi",
+  -- ["gleam"] = function() end,
+  ["go"] = "go run",
+  ["groovy"] = "groovy",
+  ["haskell"] = "runhaskell",
+  -- ["haxe"] = function() end,
+  -- ["java"] = function() end,
+  ["javascript"] = "node",
+  ["julia"] = "julia",
+  ["kit"] = "kitc --run",
+  -- ["less"] = function() end,
+  ["lisp"] = "sbcl --script",
+  ["lua"] = "lua",
+  ["mojo"] = "mojo run",
+  ["nim"] = "nim compile --verbosity:0 --hints:off --run",
+  -- ["objective-c"] = function() end,
+  ["ocaml"] = "ocaml",
+  -- ["pascal"] = function() end,
+  ["perl"] = "perl",
+  ["php"] = "php",
+  -- ["pkl"] = function() end,
+  ["powershell"] = "powershell -ExecutionPolicy ByPass -File",
+  ["python"] = "python",
+  ["r"] = "Rscript",
+  ["racket"] = "racket",
+  ["ruby"] = "ruby",
   ["rust"] = function()
     local rustflags = os.getenv("RUSTFLAGS") or ""
     return string.format("rustc %s %s -o %s && %s; rm -f %s",
@@ -37,9 +75,19 @@ M.runners = setmetatable({
       vim.fn.expand("%:r")
     )
   end,
-  ["python"] = "python",
-  ["haskell"] = "runhaskell",
+  ["sass"] = "sass --style expanded",
+  ["scala"] = "scala",
+  ["scheme"] = "csi -script",
+  ["scss"] = "scss --style expanded",
   ["sh"] = "bash",
+  -- ["sml"] = function() end,
+  ["spwn"] = "spwn build",
+  ["swift"] = "swift",
+  ["typescript"] = "ts-node",
+  ["v"] = "v run",
+  ["vbscript"] = "sccript //Nologo",
+  ["zig"] = "zig run",
+  ["zsh"] = "zsh",
 }, { __index = function() return "echo Unsupported Filetype: " end })
 
 function M.run()
