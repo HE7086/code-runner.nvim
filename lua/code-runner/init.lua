@@ -17,8 +17,9 @@ M.runners = setmetatable({
     return string.format("%s %s %s -o %s && %s; rm -f %s", cxx, cxxflags, file, exe, p, p)
   end,
   ["rust"] = function(dir, file, exe)
+    local rustflags = os.getenv("RUSTFLAGS") or ""
     local p = path.new(dir, exe)
-    return string.format("rustc %s -o %s && %s; rm -f %s", file, exe, p, p)
+    return string.format("rustc %s %s -o %s && %s; rm -f %s", rustflags, file, exe, p, p)
   end,
   ["python"] = "python",
   ["haskell"] = "runhaskell",
