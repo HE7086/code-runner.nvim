@@ -1,25 +1,41 @@
-local path = require("plenary.path")
 local term = require("toggleterm")
 
 local M = {}
 
 M.runners = setmetatable({
-  ["c"] = function(dir, file, exe)
+  ["c"] = function()
     local cc = os.getenv("CC") or "cc"
     local cflags = os.getenv("CFLAGS") or ""
-    local p = path.new(dir, exe)
-    return string.format("%s %s %s -o %s && %s; rm -f %s", cc, cflags, file, exe, p, p)
+    return string.format("%s %s %s -o %s && %s; rm -f %s",
+      cc,
+      cflags,
+      vim.fn.expand("%"),
+      vim.fn.expand("%:r"),
+      vim.fn.expand("%:p:r"),
+      vim.fn.expand("%:r")
+    )
   end,
-  ["cpp"] = function(dir, file, exe)
+  ["cpp"] = function()
     local cxx = os.getenv("CXX") or "c++"
     local cxxflags = os.getenv("CXXFLAGS") or ""
-    local p = path.new(dir, exe)
-    return string.format("%s %s %s -o %s && %s; rm -f %s", cxx, cxxflags, file, exe, p, p)
+    return string.format("%s %s %s -o %s && %s; rm -f %s",
+      cxx,
+      cxxflags,
+      vim.fn.expand("%"),
+      vim.fn.expand("%:r"),
+      vim.fn.expand("%:p:r"),
+      vim.fn.expand("%:r")
+    )
   end,
-  ["rust"] = function(dir, file, exe)
+  ["rust"] = function()
     local rustflags = os.getenv("RUSTFLAGS") or ""
-    local p = path.new(dir, exe)
-    return string.format("rustc %s %s -o %s && %s; rm -f %s", rustflags, file, exe, p, p)
+    return string.format("rustc %s %s -o %s && %s; rm -f %s",
+      rustflags,
+      vim.fn.expand("%"),
+      vim.fn.expand("%:r"),
+      vim.fn.expand("%:p:r"),
+      vim.fn.expand("%:r")
+    )
   end,
   ["python"] = "python",
   ["haskell"] = "runhaskell",
@@ -27,9 +43,6 @@ M.runners = setmetatable({
 }, { __index = function() return "echo Unsupported Filetype: " end })
 
 function M.run()
-  local dir = vim.fn.expand("%:h")
-  local file = vim.fn.expand("%")
-  local exe = vim.fn.expand("%:r")
   local filetype = vim.bo.filetype
   local runner = M.runners[filetype]
   local command = nil
@@ -37,13 +50,13 @@ function M.run()
   if type(runner) == "string" then
     command = runner .. " " .. vim.fn.expand("%:p")
   elseif type(runner) == "function" then
-    command = runner(dir, file, exe)
+    command = runner()
   else
     return
   end
 
   -- vim.api.nvim_command("tabnew | terminal " .. command)
-  term.exec(command, nil, nil, dir, nil, "Code Runner")
+  term.exec(command, nil, nil, nil, nil, "Code Runner")
 end
 
 function M.setup(opts)

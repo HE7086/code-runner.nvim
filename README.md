@@ -12,16 +12,24 @@ Simple Code Runner for Neovim
     lazy = true,
     cmd = "CodeRunnerRun",
     dependencies = {
-      "nvim-lua/plenary.nvim",
       "akinsho/toggleterm.nvim",
     },
     config = true, -- either config or opts must be present for the plugin to load
     opts = {
       runners = {
         { ft = "zsh", runner = "zsh" },
-        { ft = "rust", runner = function(dir, file, exe)
-          return string.format("cd %s && rustc %s -o %s && %s", dir, file, exe, exe)
-        end },
+        {
+          ft = "rust",
+          runner = function()
+            return string.format(
+              "rustc %s -o %s && %s; rm -f %s",
+              vim.fn.expand("%"),
+              vim.fn.expand("%:r"),
+              vim.fn.expand("%:p:r"),
+              vim.fn.expand("%:r")
+            )
+          end
+        },
       },
     },
     keys = {
