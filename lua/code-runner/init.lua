@@ -8,13 +8,13 @@ M.runners = setmetatable({
     local cc = os.getenv("CC") or "cc"
     local cflags = os.getenv("CFLAGS") or ""
     local p = path.new(dir, exe)
-    return string.format("%s -std=c23 %s %s -o %s && %s; rm -f %s", cc, cflags, file, exe, p, p)
+    return string.format("%s %s %s -o %s && %s; rm -f %s", cc, cflags, file, exe, p, p)
   end,
   ["cpp"] = function(dir, file, exe)
     local cxx = os.getenv("CXX") or "c++"
     local cxxflags = os.getenv("CXXFLAGS") or ""
     local p = path.new(dir, exe)
-    return string.format("%s -std=c++23 %s -lfmt %s -o %s && %s; rm -f %s", cxx, cxxflags, file, exe, p, p)
+    return string.format("%s %s %s -o %s && %s; rm -f %s", cxx, cxxflags, file, exe, p, p)
   end,
   ["rust"] = function(dir, file, exe)
     local p = path.new(dir, exe)
