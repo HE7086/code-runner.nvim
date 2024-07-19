@@ -9,13 +9,11 @@ Simple Code Runner for Neovim
 ```lua
   {
     "HE7086/code-runner.nvim",
-    lazy = true,
     cmd = "CodeRunnerRun",
     dependencies = {
       "akinsho/toggleterm.nvim",
     },
-    config = true, -- either config or opts must be present for the plugin to load
-    opts = {
+    opts = { -- make sure to have this none empty so the plugin could load. E.g. opts = {}
       runners = {
         { ft = "zsh", runner = "zsh" },
         {
