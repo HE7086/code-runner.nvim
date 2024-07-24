@@ -117,9 +117,6 @@ function M.setup(opts)
 
   if opts.term then
     M.term = opts.term
-    -- M.term = function(command)
-    --   vim.api.nvim_command("tabnew | terminal " .. command)
-    -- end
   else
     M.term = function(command)
       require("toggleterm").exec(command, nil, nil, nil, nil, "Code Runner")

@@ -10,11 +10,9 @@ Simple Code Runner for Neovim
   {
     "HE7086/code-runner.nvim",
     cmd = "CodeRunnerRun",
-    dependencies = {
-      "akinsho/toggleterm.nvim",
-    },
     opts = { -- make sure to have this none empty so the plugin could load. E.g. opts = {}
       runners = {
+        -- customize your own runners overriding builtin ones
         { ft = "zsh", runner = "zsh" },
         {
           ft = "rust",
@@ -29,6 +27,13 @@ Simple Code Runner for Neovim
           end
         },
       },
+      term = function(command)
+        -- use neovim's builtin terminal
+        vim.api.nvim_command("tabnew | terminal " .. command)
+
+        -- default value: use toggleterm (make sure to add it as dependency)
+        -- require("toggleterm").exec(command, nil, nil, nil, nil, "Code Runner")
+      end,
     },
     keys = {
       { "<YOUR_KEY_MAPPING>", "<Cmd>CodeRunnerRun<Cr>", desc = "Run Code" },
