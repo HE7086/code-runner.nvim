@@ -1,5 +1,3 @@
-local term = require("toggleterm")
-
 local M = {}
 
 M.runners = setmetatable({
@@ -90,6 +88,8 @@ M.runners = setmetatable({
   ["zsh"] = "zsh",
 }, { __index = function() return "echo Unsupported Filetype: " end })
 
+M.term = nil
+
 function M.run()
   local filetype = vim.bo.filetype
   local runner = M.runners[filetype]
@@ -103,8 +103,7 @@ function M.run()
     return
   end
 
-  -- vim.api.nvim_command("tabnew | terminal " .. command)
-  term.exec(command, nil, nil, nil, nil, "Code Runner")
+  M.term(command)
 end
 
 function M.setup(opts)
@@ -115,6 +114,18 @@ function M.setup(opts)
       M.runners[r.ft] = r.runner
     end
   end
+
+  if opts.term then
+    M.term = opts.term
+    -- M.term = function(command)
+    --   vim.api.nvim_command("tabnew | terminal " .. command)
+    -- end
+  else
+    M.term = function(command)
+      require("toggleterm").exec(command, nil, nil, nil, nil, "Code Runner")
+    end
+  end
+
 end
 
 return M
