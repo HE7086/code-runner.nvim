@@ -28,10 +28,10 @@ Simple Code Runner for Neovim
         },
       },
       term = function(command)
-        -- use neovim's builtin terminal
+        -- default: use neovim's builtin terminal
         vim.api.nvim_command("tabnew | terminal " .. command)
 
-        -- default value: use toggleterm (make sure to add it as dependency)
+        -- use akinsho/toggleterm.nvim
         -- require("toggleterm").exec(command, nil, nil, nil, nil, "Code Runner")
       end,
     },
