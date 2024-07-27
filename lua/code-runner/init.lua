@@ -1,5 +1,16 @@
 local M = {}
 
+local function compile_run_remove(compiler, flags)
+    return string.format("%s %s %s -o %s && %s; rm -f %s",
+      compiler,
+      flags,
+      vim.fn.expand("%"),
+      vim.fn.expand("%:r"),
+      vim.fn.expand("%:p:r"),
+      vim.fn.expand("%:r")
+    )
+end
+
 M.runners = setmetatable({
   ["ahk"] = "autohotkey",
   ["applescript"] = "osascript",
@@ -8,28 +19,14 @@ M.runners = setmetatable({
   ["c"] = function()
     local cc = os.getenv("CC") or "cc"
     local cflags = os.getenv("CFLAGS") or ""
-    return string.format("%s %s %s -o %s && %s; rm -f %s",
-      cc,
-      cflags,
-      vim.fn.expand("%"),
-      vim.fn.expand("%:r"),
-      vim.fn.expand("%:p:r"),
-      vim.fn.expand("%:r")
-    )
+    return compile_run_remove(cc, cflags)
   end,
   ["closure"] = "lein exec",
   ["coffeescript"] = "coffee",
   ["cpp"] = function()
     local cxx = os.getenv("CXX") or "c++"
     local cxxflags = os.getenv("CXXFLAGS") or ""
-    return string.format("%s %s %s -o %s && %s; rm -f %s",
-      cxx,
-      cxxflags,
-      vim.fn.expand("%"),
-      vim.fn.expand("%:r"),
-      vim.fn.expand("%:p:r"),
-      vim.fn.expand("%:r")
-    )
+    return compile_run_remove(cxx, cxxflags)
   end,
   ["crystal"] = "crystal",
   ["csharp"] = "scriptcs",
@@ -65,13 +62,7 @@ M.runners = setmetatable({
   ["ruby"] = "ruby",
   ["rust"] = function()
     local rustflags = os.getenv("RUSTFLAGS") or ""
-    return string.format("rustc %s %s -o %s && %s; rm -f %s",
-      rustflags,
-      vim.fn.expand("%"),
-      vim.fn.expand("%:r"),
-      vim.fn.expand("%:p:r"),
-      vim.fn.expand("%:r")
-    )
+    return compile_run_remove("rustc", rustflags)
   end,
   ["sass"] = "sass --style expanded",
   ["scala"] = "scala",
