@@ -33,7 +33,11 @@ M.runners = setmetatable({
   -- ["d"] = function() end,
   ["dart"] = "dart",
   ["erlang"] = "escript",
-  -- ["fortran"] = function() end,
+  ["fortran"] = function()
+    local fc = os.getenv("FC") or "gfortran"
+    local fflags = os.getenv("FFLAGS") or ""
+    return compile_run_remove(fc, fflags)
+  end,
   ["fsharp"] = "fsi",
   -- ["gleam"] = function() end,
   ["go"] = "go run",
